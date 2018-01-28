@@ -6,15 +6,24 @@
        http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-5.0.xsd">
 
     <!--Endpoint-->
-    <int:gateway service-interface="com.droidandroid.playground.springintegration.gateways.CustomGateway" default-request-channel="inputChannel">
+    <int:gateway service-interface="com.droidandroid.playground.springintegration.gateways.PrinterGateway" default-request-channel="inputChannel">
         <int:method name="print"/>
     </int:gateway>
 
+    <bean id="interceptor" class="com.droidandroid.playground.springintegration.interceptors.CustomChannelInterceptor"/>
+
     <!--Channel-->
-    <int:channel id="inputChannel"/>
+    <int:channel id="inputChannel">
+        <int:queue capacity="10"/>
+        <int:interceptors>
+            <int:ref bean="interceptor"/>
+        </int:interceptors>
+    </int:channel>
 
     <!--Endpoint-->
-    <int:service-activator ref="reverseService" input-channel="inputChannel" method="reverse"/>
+    <int:service-activator ref="reverseService" input-channel="inputChannel" method="reverse">
+        <int:poller fixed-rate="5" time-unit="SECONDS" max-messages-per-poll="2"/>
+    </int:service-activator>
 
     <!--Services-->
     <bean id="printService" class="com.droidandroid.playground.springintegration.services.PrintService"/>
