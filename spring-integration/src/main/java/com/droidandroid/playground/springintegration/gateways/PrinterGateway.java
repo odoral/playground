@@ -6,5 +6,5 @@ import java.util.concurrent.Future;
 
 public interface PrinterGateway {
 
-    Future<Message<String>> print(Message<?> message);
+    Future<Message<?>> print(Message<?> message);
 }

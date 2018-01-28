@@ -1,9 +1,9 @@
 package com.droidandroid.playground.springintegration.services;
 
-public class PrintService {
+public class PrintStringService {
 
     public void print(String message) {
-        System.out.println(message);
+        System.out.println("String message: "+message);
     }
 
 }

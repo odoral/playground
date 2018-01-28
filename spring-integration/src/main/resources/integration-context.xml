@@ -10,23 +10,22 @@
         <int:method name="print"/>
     </int:gateway>
 
-    <bean id="interceptor" class="com.droidandroid.playground.springintegration.interceptors.CustomChannelInterceptor"/>
+    <int:payload-type-router input-channel="inputChannel">
+        <int:mapping type="java.lang.String" channel="strChannel"/>
+        <int:mapping type="java.lang.Integer" channel="intChannel"/>
+    </int:payload-type-router>
 
-    <!--Channel-->
-    <int:channel id="inputChannel">
-        <int:queue capacity="10"/>
-        <int:interceptors>
-            <int:ref bean="interceptor"/>
-        </int:interceptors>
-    </int:channel>
+    <!--Channels-->
+    <int:channel id="inputChannel"/>
+    <int:channel id="strChannel"/>
+    <int:channel id="intChannel"/>
 
-    <!--Endpoint-->
-    <int:service-activator ref="reverseService" input-channel="inputChannel" method="reverse">
-        <int:poller fixed-rate="5" time-unit="SECONDS" max-messages-per-poll="2"/>
-    </int:service-activator>
+    <!--Endpoints-->
+    <int:service-activator ref="printStringService" input-channel="strChannel" method="print"/>
+    <int:service-activator ref="printIntegerService" input-channel="intChannel" method="print"/>
 
     <!--Services-->
-    <bean id="printService" class="com.droidandroid.playground.springintegration.services.PrintService"/>
-    <bean id="reverseService" class="com.droidandroid.playground.springintegration.services.ReversePrintService"/>
+    <bean id="printStringService" class="com.droidandroid.playground.springintegration.services.PrintStringService"/>
+    <bean id="printIntegerService" class="com.droidandroid.playground.springintegration.services.PrintIntegerService"/>
 
 </beans>
