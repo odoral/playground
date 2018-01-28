@@ -10,21 +10,24 @@
         <int:method name="print"/>
     </int:gateway>
 
-    <int:payload-type-router input-channel="inputChannel">
-        <int:mapping type="java.lang.String" channel="strChannel"/>
-        <int:mapping type="java.lang.Integer" channel="intChannel"/>
-    </int:payload-type-router>
+    <int:recipient-list-router input-channel="inputChannel" default-output-channel="defaultChannel">
+        <int:recipient channel="intChannel" selector-expression="payload.equals(51)"/>
+        <int:recipient channel="strChannel" selector-expression="payload.equals(51)"/>
+    </int:recipient-list-router>
 
     <!--Channels-->
     <int:channel id="inputChannel"/>
+    <int:channel id="defaultChannel"/>
     <int:channel id="strChannel"/>
     <int:channel id="intChannel"/>
 
     <!--Endpoints-->
+    <int:service-activator ref="defaultPrintService" input-channel="defaultChannel" method="print"/>
     <int:service-activator ref="printStringService" input-channel="strChannel" method="print"/>
     <int:service-activator ref="printIntegerService" input-channel="intChannel" method="print"/>
 
     <!--Services-->
+    <bean id="defaultPrintService" class="com.droidandroid.playground.springintegration.services.DefaultPrintService"/>
     <bean id="printStringService" class="com.droidandroid.playground.springintegration.services.PrintStringService"/>
     <bean id="printIntegerService" class="com.droidandroid.playground.springintegration.services.PrintIntegerService"/>
 
