@@ -14,7 +14,9 @@
     <int:channel id="inputChannel"/>
     <int:channel id="outputChannel"/>
 
-    <int:filter expression="payload.equals(4)" input-channel="inputChannel" output-channel="outputChannel"/>
+    <bean id="customFilter" class="com.droidandroid.playground.springintegration.filters.CustomFilter"/>
+
+    <int:filter ref="customFilter" input-channel="inputChannel" output-channel="outputChannel"/>
 
     <!--Endpoints-->
     <int:service-activator ref="printStringService" input-channel="outputChannel" method="print"/>
