@@ -10,24 +10,16 @@
         <int:method name="print"/>
     </int:gateway>
 
-    <bean id="customRouter" class="com.droidandroid.playground.springintegration.routers.CustomRouter"/>
-
-    <int:router ref="customRouter" input-channel="inputChannel"/>
-
     <!--Channels-->
     <int:channel id="inputChannel"/>
-    <int:channel id="defaultChannel"/>
-    <int:channel id="strChannel"/>
-    <int:channel id="intChannel"/>
+    <int:channel id="outputChannel"/>
+
+    <int:filter expression="payload.equals(4)" input-channel="inputChannel" output-channel="outputChannel"/>
 
     <!--Endpoints-->
-    <int:service-activator ref="defaultPrintService" input-channel="defaultChannel" method="print"/>
-    <int:service-activator ref="printStringService" input-channel="strChannel" method="print"/>
-    <int:service-activator ref="printIntegerService" input-channel="intChannel" method="print"/>
+    <int:service-activator ref="printStringService" input-channel="outputChannel" method="print"/>
 
     <!--Services-->
-    <bean id="defaultPrintService" class="com.droidandroid.playground.springintegration.services.DefaultPrintService"/>
     <bean id="printStringService" class="com.droidandroid.playground.springintegration.services.PrintStringService"/>
-    <bean id="printIntegerService" class="com.droidandroid.playground.springintegration.services.PrintIntegerService"/>
 
 </beans>
